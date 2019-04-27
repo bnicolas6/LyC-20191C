@@ -1,0 +1,7 @@
+Cambios en la v1.1
+-Se corrigió el formato de la declaración de variables acorde al del 1c 2019
+-Se corrigió el formato de los comentarios acorde al del 1c 2019
+-Se cambiaron las asignaciones, ahora llevan un punto y coma al final, para ahorrar futuros dolores de cabeza
+
+Problemas actuales
+Explota en la linea 21
