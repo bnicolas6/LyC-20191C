@@ -122,7 +122,21 @@ DISPLAY			[Dd][Ii][Ss][Pp][Ll][Aa][Yy]
 "!="            { return DISTINTO; }
 
 {ID}			{ yylval.strVal = strdup(yytext); validarID(yylval.strVal); return ID; }
-{CTE_STRING}	{ yylval.strVal = strdup(yytext); validarString(yylval.strVal); insertar_ctestring_en_ts(yylval.strVal); return CTE_STRING; }
+{CTE_STRING}	{ yylval.strVal = strdup(yytext); 
+
+				validarString(yylval.strVal); 
+				
+				/** Esto lo hice porque me agarraba las comillas, creo que esta mal la regex...
+					arreglar en versiones futuras, por ahora esto funciona **/
+					
+					yylval.strVal = malloc(yyleng - 1);  
+					memcpy (yylval.strVal, yytext + 1, yyleng - 2); 
+					yylval.strVal[yyleng - 2] = 0; 
+				/** fin del codigo rancio**/
+				
+				insertar_ctestring_en_ts(yylval.strVal); 
+				
+				return CTE_STRING; }
 {CTE_INT}		{ yylval.intVal = atoi(yytext); validarInt(yylval.intVal); insertar_cteint_en_ts(yylval.intVal); return CTE_INT; }
 {CTE_REAL}		{ yylval.realVal = atof(yytext); validarReal(yylval.realVal); insertar_ctereal_en_ts(yylval.realVal); return CTE_REAL; }
 
