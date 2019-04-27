@@ -70,14 +70,16 @@ bloque: sentencia
 	  | bloque sentencia
 	  ;
 		
-sentencia: asignacion { printf("Asignacion OK\n"); }
-		 | iteracion  { printf("Iteracion OK\n"); }
-		 | decision   { printf("Decision OK\n"); }
-		 | entrada    { printf("Entrada OK\n"); }
-		 | salida     { printf("Salida OK\n"); }
+sentencia: asignacion PUNTO_COMA	{ printf("Asignacion OK\n"); }
+		 | iteracion  				{ printf("Iteracion OK\n"); }
+		 | decision   				{ printf("Decision OK\n"); }
+		 | entrada PUNTO_COMA   	{ printf("Entrada OK\n"); }
+		 | salida PUNTO_COMA    	{ printf("Salida OK\n"); }
+		 | take PUNTO_COMA	  		{ printf("Take OK\n"); }
+		 | fibonacci PUNTO_COMA 	{ printf("Fibonacci OK\n"); }
 		 ;
 		 
-asignacion: ID ASIG expresion PUNTO_COMA
+asignacion: ID ASIG expresion
 		  ;
 
 iteracion: WHILE P_A condicion P_C bloque ENDWHILE
@@ -99,11 +101,10 @@ comparacion: expresion MENOR expresion       { printf("Condicion menor OK\n"); }
 		   | expresion MAYOR expresion       { printf("Condicion mayor OK\n"); }
 		   | expresion MAYOR_IGUAL expresion { printf("Condicion mayor o igual OK\n"); }
 		   | expresion IGUAL expresion       { printf("Condicion igual OK\n"); }
-		   | expresion DISTINTO expresion    { printf("Condicion distinto OK\n"); }
-		   | fibonacci                       { printf("Fibonacci OK\n"); }
+		   | expresion DISTINTO expresion    { printf("Condicion distinto OK\n"); }                   
 		   ; 
 
-fibonacci: FIBONACCI P_A C_A CTE_INT C_C P_C
+fibonacci: FIBONACCI P_A CTE_INT P_C
 
 
 take: 	TAKE P_A OP_SUMA PUNTO_COMA CTE_INT PUNTO_COMA C_A takelist C_C P_C { printf("Take suma OK\n"); }
@@ -130,7 +131,8 @@ termino: termino OP_MULT factor { printf("Multiplicacion OK\n"); }
 factor: ID	              { existe_en_ts($1); printf("ID es: %s\n",yylval.strVal); }  
 	  | constante
 	  | P_A expresion P_C
-	  | take
+	  | fibonacci 		  { printf("Fibonacci OK\n"); }
+	  | take 			  { printf("Take OK\n"); }
 	  ;
 	  
 constante: CTE_INT    { printf("ENTERO es: %d\n",yylval.intVal); }  
@@ -138,11 +140,11 @@ constante: CTE_INT    { printf("ENTERO es: %d\n",yylval.intVal); }
 		 | CTE_REAL   { printf("REAL es: %.2f\n",yylval.realVal); }
 		 ;
 
-entrada: GET ID
+entrada: GET ID PUNTO_COMA
        ;
 	   
-salida: DISPLAY CTE_STRING
-      | DISPLAY ID 			{ existe_en_ts($2); }
+salida: DISPLAY CTE_STRING PUNTO_COMA
+      | DISPLAY ID PUNTO_COMA			{ existe_en_ts($2); }
 	  ;
 	  
 %%
