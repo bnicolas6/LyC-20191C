@@ -1,0 +1,16 @@
+a1	REAL		-
+b1	REAL		-
+variable1	STRING		-
+a	INT		-
+b	INT		-
+_123	CTE_INT	123	-
+_"asd"	CTE_STRING	"asd"	5
+_9999	CTE_INT	9999	-
+_99.	CTE_REAL	99.	-
+_3	CTE_INT	3	-
+_5	CTE_INT	5	-
+_2	CTE_INT	2	-
+_12	CTE_INT	12	-
+_24	CTE_INT	24	-
+_48	CTE_INT	48	-
+_4	CTE_INT	4	-

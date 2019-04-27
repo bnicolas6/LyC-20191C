@@ -84,8 +84,8 @@ asignacion: ID ASIG expresion PUNTO_COMA
 iteracion: WHILE P_A condicion P_C bloque ENDWHILE
 		 ;
 		
-decision: IF P_A condicion P_C bloque ENDIF
-		| IF P_A condicion P_C bloque ELSE bloque ENDIF
+decision: IF P_A condicion P_C bloque ELSE bloque ENDIF
+		| IF P_A condicion P_C bloque ENDIF
 		;
 
 condicion: comparacion
