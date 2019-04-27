@@ -70,16 +70,16 @@ bloque: sentencia
 	  | bloque sentencia
 	  ;
 		
-sentencia: asignacion { printf("Asignacion OK\n"); }
-		 | iteracion  { printf("Iteracion OK\n"); }
-		 | decision   { printf("Decision OK\n"); }
-		 | entrada    { printf("Entrada OK\n"); }
-		 | salida     { printf("Salida OK\n"); }
-		 | take 	  { printf("Take OK\n"); }
-		 | fibonacci  { printf("Fibonacci OK\n"); }
+sentencia: asignacion PUNTO_COMA	{ printf("Asignacion OK\n"); }
+		 | iteracion  				{ printf("Iteracion OK\n"); }
+		 | decision   				{ printf("Decision OK\n"); }
+		 | entrada PUNTO_COMA   	{ printf("Entrada OK\n"); }
+		 | salida PUNTO_COMA    	{ printf("Salida OK\n"); }
+		 | take PUNTO_COMA	  		{ printf("Take OK\n"); }
+		 | fibonacci PUNTO_COMA 	{ printf("Fibonacci OK\n"); }
 		 ;
 		 
-asignacion: ID ASIG expresion PUNTO_COMA
+asignacion: ID ASIG expresion
 		  ;
 
 iteracion: WHILE P_A condicion P_C bloque ENDWHILE
