@@ -75,7 +75,6 @@ sentencia: asignacion { printf("Asignacion OK\n"); }
 		 | decision   { printf("Decision OK\n"); }
 		 | entrada    { printf("Entrada OK\n"); }
 		 | salida     { printf("Salida OK\n"); }
-		 | take
 		 ;
 		 
 asignacion: ID ASIG expresion PUNTO_COMA
@@ -131,6 +130,7 @@ termino: termino OP_MULT factor { printf("Multiplicacion OK\n"); }
 factor: ID	              { existe_en_ts($1); printf("ID es: %s\n",yylval.strVal); }  
 	  | constante
 	  | P_A expresion P_C
+	  | take
 	  ;
 	  
 constante: CTE_INT    { printf("ENTERO es: %d\n",yylval.intVal); }  
