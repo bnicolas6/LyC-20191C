@@ -6,6 +6,8 @@
 #include <float.h>
 #include <limits.h>
 #include "y.tab.h"
+#define _INT_MIN 0
+#define _INT_MAX 32767
 
 FILE *yyin;
 
@@ -154,7 +156,7 @@ DISPLAY			[Dd][Ii][Ss][Pp][Ll][Aa][Yy]
 int validarInt(int entero)
 {
 
-	if(entero < INT_MIN || entero > INT_MAX){
+	if(entero < _INT_MIN || entero > _INT_MAX){
 		printf("(!) ERROR: Constante entera fuera de rango (32 bits maximo) -> Linea %d\n", yylineno);
 		fprintf(stderr, "Fin de ejecucion.\n");
 		system ("Pause");
