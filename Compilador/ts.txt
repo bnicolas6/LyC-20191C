@@ -13,3 +13,257 @@ _2	CTE_INT	2	-
 _12	CTE_INT	12	-
 _24	CTE_INT	24	-
 _48	CTE_INT	48	-
+_4	CTE_INT	4	-
+_2	CTE_INT	2	-
+_12	CTE_INT	12	-
+_24	CTE_INT	24	-
+_48	CTE_INT	48	-
+a1	REAL		-
+b1	REAL		-
+variable1	STRING		-
+a	INT		-
+b	INT		-
+c	INT		-
+d	INT		-
+_123	CTE_INT	123	-
+_666	CTE_INT	666	-
+_asd	CTE_STRING	asd	3
+_9999	CTE_INT	9999	-
+_99.	CTE_REAL	99.	-
+_4	CTE_INT	4	-
+_2	CTE_INT	2	-
+_12	CTE_INT	12	-
+_24	CTE_INT	24	-
+_48	CTE_INT	48	-
+_1	CTE_INT	1	-
+_15	CTE_INT	15	-
+_3	CTE_INT	3	-
+_pepe 2	CTE_STRING	pepe 2	6
+a1	REAL		-
+b1	REAL		-
+variable1	STRING		-
+a	INT		-
+b	INT		-
+c	INT		-
+d	INT		-
+_123	CTE_INT	123	-
+_666	CTE_INT	666	-
+_asd	CTE_STRING	asd	3
+_9999	CTE_INT	9999	-
+_99.	CTE_REAL	99.	-
+_4	CTE_INT	4	-
+_2	CTE_INT	2	-
+_12	CTE_INT	12	-
+_24	CTE_INT	24	-
+_48	CTE_INT	48	-
+_1	CTE_INT	1	-
+_15	CTE_INT	15	-
+_3	CTE_INT	3	-
+_5	CTE_INT	5	-
+_pepe 2	CTE_STRING	pepe 2	6
+a1	REAL		-
+b1	REAL		-
+variable1	STRING		-
+a	INT		-
+b	INT		-
+c	INT		-
+d	INT		-
+_123	CTE_INT	123	-
+_666	CTE_INT	666	-
+_asd	CTE_STRING	asd	3
+_9999	CTE_INT	9999	-
+_99.	CTE_REAL	99.	-
+_4	CTE_INT	4	-
+_2	CTE_INT	2	-
+_12	CTE_INT	12	-
+_24	CTE_INT	24	-
+_48	CTE_INT	48	-
+_1	CTE_INT	1	-
+_15	CTE_INT	15	-
+_3	CTE_INT	3	-
+_5	CTE_INT	5	-
+_pepe 2	CTE_STRING	pepe 2	6
+a1	REAL		-
+b1	REAL		-
+variable1	STRING		-
+a	INT		-
+b	INT		-
+c	INT		-
+d	INT		-
+_123	CTE_INT	123	-
+_666	CTE_INT	666	-
+_asd	CTE_STRING	asd	3
+_9999	CTE_INT	9999	-
+_99.	CTE_REAL	99.	-
+_4	CTE_INT	4	-
+_2	CTE_INT	2	-
+_12	CTE_INT	12	-
+_24	CTE_INT	24	-
+_48	CTE_INT	48	-
+_1	CTE_INT	1	-
+_15	CTE_INT	15	-
+_3	CTE_INT	3	-
+_5	CTE_INT	5	-
+_pepe 2	CTE_STRING	pepe 2	6
+a1	REAL		-
+b1	REAL		-
+variable1	STRING		-
+a	INT		-
+b	INT		-
+c	INT		-
+d	INT		-
+_123	CTE_INT	123	-
+_666	CTE_INT	666	-
+_asd	CTE_STRING	asd	3
+_9999	CTE_INT	9999	-
+_99.	CTE_REAL	99.	-
+_4	CTE_INT	4	-
+_2	CTE_INT	2	-
+_12	CTE_INT	12	-
+_24	CTE_INT	24	-
+_48	CTE_INT	48	-
+_1	CTE_INT	1	-
+_15	CTE_INT	15	-
+_3	CTE_INT	3	-
+_5	CTE_INT	5	-
+_pepe 2	CTE_STRING	pepe 2	6
+a1	REAL		-
+b1	REAL		-
+variable1	STRING		-
+a	INT		-
+b	INT		-
+c	INT		-
+d	INT		-
+_123	CTE_INT	123	-
+_666	CTE_INT	666	-
+_asd	CTE_STRING	asd	3
+_9999	CTE_INT	9999	-
+_99.	CTE_REAL	99.	-
+_4	CTE_INT	4	-
+_2	CTE_INT	2	-
+_12	CTE_INT	12	-
+_24	CTE_INT	24	-
+_48	CTE_INT	48	-
+_1	CTE_INT	1	-
+_15	CTE_INT	15	-
+_3	CTE_INT	3	-
+_5	CTE_INT	5	-
+_pepe 1	CTE_STRING	pepe 1	6
+_pepe 2	CTE_STRING	pepe 2	6
+a1	REAL		-
+b1	REAL		-
+variable1	STRING		-
+a	INT		-
+b	INT		-
+c	INT		-
+d	INT		-
+_123	CTE_INT	123	-
+_666	CTE_INT	666	-
+_asd	CTE_STRING	asd	3
+_9999	CTE_INT	9999	-
+_99.	CTE_REAL	99.	-
+_4	CTE_INT	4	-
+_2	CTE_INT	2	-
+_12	CTE_INT	12	-
+_24	CTE_INT	24	-
+_48	CTE_INT	48	-
+_1	CTE_INT	1	-
+_15	CTE_INT	15	-
+_3	CTE_INT	3	-
+_5	CTE_INT	5	-
+_pepe 1	CTE_STRING	pepe 1	6
+_pepe 2	CTE_STRING	pepe 2	6
+a1	REAL		-
+b1	REAL		-
+variable1	STRING		-
+a	INT		-
+b	INT		-
+c	INT		-
+d	INT		-
+_123	CTE_INT	123	-
+_666	CTE_INT	666	-
+_asd	CTE_STRING	asd	3
+_9999	CTE_INT	9999	-
+_99.	CTE_REAL	99.	-
+_4	CTE_INT	4	-
+_2	CTE_INT	2	-
+_12	CTE_INT	12	-
+_24	CTE_INT	24	-
+_48	CTE_INT	48	-
+_1	CTE_INT	1	-
+_15	CTE_INT	15	-
+_3	CTE_INT	3	-
+_5	CTE_INT	5	-
+_pepe 1	CTE_STRING	pepe 1	6
+_pepe 2	CTE_STRING	pepe 2	6
+a1	REAL		-
+b1	REAL		-
+variable1	STRING		-
+a	INT		-
+b	INT		-
+c	INT		-
+d	INT		-
+_123	CTE_INT	123	-
+_666	CTE_INT	666	-
+_asd	CTE_STRING	asd	3
+_9999	CTE_INT	9999	-
+_99.	CTE_REAL	99.	-
+_4	CTE_INT	4	-
+_2	CTE_INT	2	-
+_12	CTE_INT	12	-
+_24	CTE_INT	24	-
+_48	CTE_INT	48	-
+_1	CTE_INT	1	-
+_15	CTE_INT	15	-
+_3	CTE_INT	3	-
+_5	CTE_INT	5	-
+_pepe 1	CTE_STRING	pepe 1	6
+_pepe 2	CTE_STRING	pepe 2	6
+a1	REAL		-
+b1	REAL		-
+variable1	STRING		-
+a	INT		-
+b	INT		-
+c	INT		-
+d	INT		-
+_123	CTE_INT	123	-
+_666	CTE_INT	666	-
+_asd	CTE_STRING	asd	3
+_9999	CTE_INT	9999	-
+_99.	CTE_REAL	99.	-
+_4	CTE_INT	4	-
+_2	CTE_INT	2	-
+_12	CTE_INT	12	-
+_24	CTE_INT	24	-
+_48	CTE_INT	48	-
+_1	CTE_INT	1	-
+_15	CTE_INT	15	-
+_3	CTE_INT	3	-
+_5	CTE_INT	5	-
+_pepe 1	CTE_STRING	pepe 1	6
+_1000	CTE_INT	1000	-
+_pepe 2	CTE_STRING	pepe 2	6
+a1	REAL		-
+b1	REAL		-
+variable1	STRING		-
+a	INT		-
+b	INT		-
+c	INT		-
+d	INT		-
+_123	CTE_INT	123	-
+_666	CTE_INT	666	-
+_asd	CTE_STRING	asd	3
+_9999	CTE_INT	9999	-
+_99.	CTE_REAL	99.	-
+_4	CTE_INT	4	-
+_2	CTE_INT	2	-
+_12	CTE_INT	12	-
+_24	CTE_INT	24	-
+_48	CTE_INT	48	-
+_1	CTE_INT	1	-
+_15	CTE_INT	15	-
+_3	CTE_INT	3	-
+_5	CTE_INT	5	-
+_1000	CTE_INT	1000	-
+_pepe 1	CTE_STRING	pepe 1	6
+_pepe 2	CTE_STRING	pepe 2	6

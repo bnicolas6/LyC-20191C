@@ -140,11 +140,11 @@ constante: CTE_INT    { printf("ENTERO es: %d\n",yylval.intVal); }
 		 | CTE_REAL   { printf("REAL es: %.2f\n",yylval.realVal); }
 		 ;
 
-entrada: GET ID PUNTO_COMA
+entrada: GET ID
        ;
 	   
-salida: DISPLAY CTE_STRING PUNTO_COMA
-      | DISPLAY ID PUNTO_COMA			{ existe_en_ts($2); }
+salida: DISPLAY CTE_STRING
+      | DISPLAY ID 			{ existe_en_ts($2); }
 	  ;
 	  
 %%

@@ -23,14 +23,14 @@ a = fib(15);
 
 IF ( a < (a*3) )
     IF (a == FIB(5) AND a > c)
-        a = a + TAKE(+;2;[2;12;24;48]);
+        a = a + TAKE (+;2;[2;12;24;48]);
     ENDIF
 ELSE
-   a = a-5;
+   a = a - 5;
 ENDIF
 
 
-IF ( FIB(2) >= (a / TAKE(*;3;[2;12;24;48])) )
+IF ( FIB(2) >= (a / TAKE (*;3;[2;12;24;48])) )
     IF (a == b OR a <= b)
     	*/Soy otro comentario/*
         a = a - 5;
@@ -41,7 +41,7 @@ IF (NOT(FIB(3) > 4))
 	c = "666";
 ENDIF
 
-WHILE (fib(1) * TAKE(*;3;[2;12;24;48]) < 1000 AND )
+WHILE (fib(1) * TAKE (*;3;[2;12;24;48]) < 1000)
 	d = fib(1);
 	variable1 = "pepe 1";
 ENDWHILE
