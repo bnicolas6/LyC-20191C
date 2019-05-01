@@ -12,6 +12,8 @@ char tipoActual[10]={""};
 char listaVariables[10][20]={""};
 int variableActual=0;
 void reinicioVariables();
+int contTAKE = 0;
+int CTE_TAKE = 0;
 
 %}
 
@@ -75,7 +77,7 @@ sentencia: asignacion PUNTO_COMA	{ printf("Asignacion OK\n"); }
 		 | decision   				{ printf("Decision OK\n"); }
 		 | entrada PUNTO_COMA   	{ printf("Entrada OK\n"); }
 		 | salida PUNTO_COMA    	{ printf("Salida OK\n"); }
-		 | take PUNTO_COMA	  		{ printf("Take OK\n"); }
+		 | take PUNTO_COMA
 		 | fibonacci PUNTO_COMA 	{ printf("Fibonacci OK\n"); }
 		 ;
 		 
@@ -107,14 +109,14 @@ comparacion: expresion MENOR expresion       { printf("Condicion menor OK\n"); }
 fibonacci: FIBONACCI P_A CTE_INT P_C
 
 
-take: 	TAKE P_A OP_SUMA PUNTO_COMA CTE_INT PUNTO_COMA C_A takelist C_C P_C { printf("Take suma OK\n"); }
-		| TAKE P_A OP_RESTA PUNTO_COMA CTE_INT PUNTO_COMA C_A takelist C_C P_C { printf("Take resta OK\n"); }
-		| TAKE P_A OP_MULT PUNTO_COMA CTE_INT PUNTO_COMA C_A takelist C_C P_C { printf("Take multi OK\n"); }
-		| TAKE P_A OP_DIV PUNTO_COMA CTE_INT PUNTO_COMA C_A takelist C_C P_C { printf("Take div OK\n"); }
+take: 	TAKE P_A OP_SUMA PUNTO_COMA CTE_INT {CTE_TAKE = yylval.intVal;} PUNTO_COMA C_A takelist C_C P_C { if(CTE_TAKE>contTAKE && contTAKE!=0) yyerror("Error Take!"); else {printf("Take suma OK\n"); contTAKE=0; CTE_TAKE=0;} }
+		| TAKE P_A OP_RESTA PUNTO_COMA CTE_INT {CTE_TAKE = yylval.intVal;} PUNTO_COMA C_A takelist C_C P_C { if(CTE_TAKE>contTAKE && contTAKE!=0) yyerror("Error Take!"); else {printf("Take resta OK\n"); contTAKE=0; CTE_TAKE=0;} }
+		| TAKE P_A OP_MULT PUNTO_COMA CTE_INT {CTE_TAKE = yylval.intVal;} PUNTO_COMA C_A takelist C_C P_C { if(CTE_TAKE>contTAKE && contTAKE!=0) yyerror("Error Take!"); else {printf("Take mult OK\n"); contTAKE=0; CTE_TAKE=0;} }
+		| TAKE P_A OP_DIV PUNTO_COMA CTE_INT {CTE_TAKE = yylval.intVal;} PUNTO_COMA C_A takelist C_C P_C { if(CTE_TAKE>contTAKE && contTAKE!=0) yyerror("Error Take!"); else {printf("Take div OK\n"); contTAKE=0; CTE_TAKE=0;} }
 		;
 
-takelist: 	takelist PUNTO_COMA CTE_INT
-			| CTE_INT
+takelist: 	takelist PUNTO_COMA CTE_INT {contTAKE++;}
+			| CTE_INT {contTAKE++;}
 			|
 			;
 		  

@@ -1,49 +1,6 @@
-DECVAR 
-	FLOAT : a1; b1
-	STRING: variable1
-	INT : a;b;c;d
-ENDDEC
-
-*/soy un comentario/*
-
-b = 123;
-c = 666;
-a = b;
-variable1 = "asd";
-variable1 = "asd";
-a1 = .9999;
-b1 = 99.;
-
-GET d;
-
-TAKE (/;4;[2;12;24;48]);
-FIB(1);
-
-a = fib(15);
-
-IF ( a < (a*3) )
-    IF (a == FIB(5) AND a > c)
-        a = a + TAKE (+;2;[2;12;24;48]);
-    ENDIF
-ELSE
-   a = a - 5;
-ENDIF
-
-
-IF ( FIB(2) >= (a / TAKE (*;3;[2;12;24;48])) )
-    IF (a == b OR a <= b)
-    	*/Soy otro comentario/*
-        a = a - 5;
-    ENDIF
-ENDIF
-
-IF (NOT(FIB(3) > 4))
-	c = "666";
-ENDIF
-
-WHILE (fib(1) * TAKE (*;3;[2;12;24;48]) < 1000)
-	d = fib(1);
-	variable1 = "pepe 1";
-ENDWHILE
-
-DISPLAY "pepe 2";
+TAKE (* ; 3 ; [2 ; 12 ; 24 ; 48] );
+TAKE (+ ; 2 ; [2 ; 12 ; 24 ; 48] );
+TAKE (- ; 3 ; [2 ; 12 ; 24 ; 48] );
+TAKE (/ ; 4 ; [2 ; 12 ; 24 ; 48] );
+TAKE (/ ; 3 ; [2 ; 12 ] );
+TAKE (/ ; 4 ; [ ] );
