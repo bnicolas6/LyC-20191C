@@ -89,7 +89,14 @@ int while_salto_a_completar;
 int while_pos_a_completar[11];
 int while_index = 0;
 void while_guardar_pos(int pos);
-/**** FIN IF ****/
+/**** FIN WHILE ****/
+
+/**** FIBONACCI ****/
+int generarFibonacci(int num);
+int numFibo=0;
+
+/**** FIBONACCI ****/
+
 %}
 
 %union {
@@ -241,7 +248,7 @@ comparacion: expresion { IndComparacion = IndExpresion; }
 			 }                  
 		   ; 
 
-fibonacci: FIBONACCI P_A CTE_INT P_C
+fibonacci: FIBONACCI P_A CTE_INT P_C { numFibo=$3; }
 
 
 take: 	TAKE P_A takeOp PUNTO_COMA CTE_INT PUNTO_COMA C_A takelist C_C P_C {  }
@@ -274,7 +281,7 @@ factor: ID	               { IndFactor = crearTerceto_ccc($1, "", ""); }
                             IndExpresion = sacarDePila(&pilaExpresion);
                             IndTermino = sacarDePila(&pilaTermino);
                         }
-	  | fibonacci 		  {  }
+	  | fibonacci 		  { IndFactor = generarFibonacci(numFibo); }
 	  | take 			  {  }
 	  ;
 	  
@@ -488,4 +495,48 @@ void completar_salto_si_es_comparacion_AND(int pos) {
 			and_index--;
 		}
 
+}
+
+/*** BASICAMENTE ES UN CHORIZO DE TERCETOS QUE HACE EL FIBONACCI***/
+
+int generarFibonacci(int num){
+	char auxnum[10];
+	sprintf(auxnum,"%d",num);
+	
+	//si me llega un 0, retorno 1, creo que era asi la serie..
+	if(num == 0)
+		return crearTerceto_icc(1,"","");
+	
+	crearTerceto_ccc(auxnum,"","");
+	crearTerceto_ccc("cont","","");
+	crearTerceto_cii("=",terceto_index-1,terceto_index-2);
+	crearTerceto_icc(0,"","");
+	crearTerceto_ccc("n1","","");
+	crearTerceto_cii("=",terceto_index-1,terceto_index-2);
+	crearTerceto_icc(1,"","");
+	crearTerceto_ccc("n2","","");
+	crearTerceto_cii("=",terceto_index-1,terceto_index-2);
+	crearTerceto_ccc("n1","","");						//saltar aca si tengo q seguir comparando
+	crearTerceto_ccc("n2","","");
+	crearTerceto_cii("+",terceto_index-1,terceto_index-2);
+	crearTerceto_ccc("fibo","","");
+	crearTerceto_cii("=",terceto_index-1,terceto_index-2);
+	crearTerceto_icc(1,"","");
+	crearTerceto_ccc("cont","","");
+	crearTerceto_cii("-",terceto_index-1,terceto_index-2);
+	crearTerceto_ccc("cont","","");
+	crearTerceto_cii("=",terceto_index-1,terceto_index-2);
+	crearTerceto_icc(0,"","");
+	crearTerceto_ccc("cont","","");
+	crearTerceto_cii("CMP",terceto_index-1,terceto_index-2);
+	crearTerceto_cic("BEQ",terceto_index+8,"");
+	crearTerceto_ccc("n2","","");
+	crearTerceto_ccc("n1","","");
+	crearTerceto_cii("=",terceto_index-1,terceto_index-2);
+	crearTerceto_ccc("fibo","","");
+	crearTerceto_ccc("n2","","");
+	crearTerceto_cii("=",terceto_index-1,terceto_index-2);
+	crearTerceto_cic("BI",terceto_index-20,"");
+	
+	return crearTerceto_ccc("fibo","","");
 }
