@@ -8,11 +8,88 @@
 FILE *yyin;
 char *yytext;
 extern int yylineno;
+
+/**** DEC VARIABLES ****/
 char tipoActual[10]={""};
 char listaVariables[10][20]={""};
 int variableActual=0;
 void reinicioVariables();
+/**** DEC VARIABLES ****/
 
+
+/**** INICIO TERCETOS ****/
+//Indices de los tercetos
+int IndAsignacion;
+int IndExpresion;
+int IndTermino;
+int IndFactor;
+int IndInlist;
+int IndEntrada;
+int IndSalida;
+
+//Estructura del terceto
+struct terceto {
+	char *uno;
+	char *dos;
+	char *tres;
+};
+struct terceto tercetos[1000];
+int terceto_index = 0;
+
+int crearTerceto_ccc(char *uno, char *dos, char *tres);	//terceto con 3 chars
+int crearTerceto_cci(char *uno, char *dos, int tres);	//terceto con dos chars y un entero
+int crearTerceto_cii(char *uno, int dos, int tres);	//terceto con un char y dos enteros
+int crearTerceto_fcc(float uno, char *dos, char *tres);	//terceto con un float y dos chars
+int crearTerceto_icc(int uno, char *dos, char *tres);	//terceto con un entero y dos char
+int crearTerceto_cic(char *uno, int dos, char *tres);	//terceto con un char, un int y otro char
+
+void save_tercetos();
+/**** FIN TERCETOS ****/
+
+/**** INICIO PILA ****/
+const int tamPila = 100;
+
+typedef struct {
+    int pila[100];
+    int tope;
+} Pila;
+
+void crearPila( Pila *p);
+int pilaLLena( Pila *p );
+int pilaVacia( Pila *p);
+int ponerEnPila(Pila *p, int dato);
+int sacarDePila(Pila *p);
+
+Pila pilaExpresion;
+Pila pilaTermino;
+/**** FIN PILA ****/
+
+/**** INICIO COMPARACION ****/
+char valor_comparacion[3];
+int IndComparacion;
+int saltos_and_a_completar[6];
+int and_index = 0;
+void completar_salto_si_es_comparacion_AND(int pos);
+int pos_a_completar_OR;
+int es_negado = 0;
+/**** FIN COMPARACION ****/
+
+/**** INICIO IF ****/
+int if_salto_a_completar;
+int if_saltos[6];
+int if_index = 0;
+void if_guardar_salto(int pos);
+void if_completar_ultimo_salto_guardado_con(int pos);
+/**** FIN IF ****/
+
+
+/**** INICIO WHILE ****/
+int while_pos_inicio;
+int while_salto_a_completar;
+int while_pos_a_completar[11];
+int while_index = 0;
+void while_guardar_pos(int pos);
+/**** FIN IF ****/
 %}
 
 %union {
@@ -70,74 +147,140 @@ bloque: sentencia
 	  | bloque sentencia
 	  ;
 		
-sentencia: asignacion PUNTO_COMA	{ printf("Asignacion OK\n"); }
-		 | iteracion  				{ printf("Iteracion OK\n"); }
-		 | decision   				{ printf("Decision OK\n"); }
-		 | entrada PUNTO_COMA   	{ printf("Entrada OK\n"); }
-		 | salida PUNTO_COMA    	{ printf("Salida OK\n"); }
-		 | take PUNTO_COMA	  		{ printf("Take OK\n"); }
-		 | fibonacci PUNTO_COMA 	{ printf("Fibonacci OK\n"); }
+sentencia: asignacion PUNTO_COMA	{  }
+		 | iteracion  				{  }
+		 | decision   				{  }
+		 | entrada PUNTO_COMA   	{  }
+		 | salida PUNTO_COMA    	{  }
+		 | take PUNTO_COMA	  		{  }
+		 | fibonacci PUNTO_COMA 	{  }
 		 ;
 		 
-asignacion: ID ASIG expresion
+asignacion: ID ASIG expresion { IndAsignacion = crearTerceto_cii("=", crearTerceto_ccc($1, "",""), IndExpresion); }
 		  ;
 
-iteracion: WHILE P_A condicion P_C bloque ENDWHILE
+iteracion: WHILE P_A { while_guardar_pos(terceto_index); }
+			condicion P_C { if(strcmp(valor_comparacion, "") != 0) while_guardar_pos(crearTerceto_ccc(valor_comparacion, "", "")); else while_index++; }
+			bloque ENDWHILE {
+				char *salto = (char*) malloc(sizeof(int));
+				itoa(terceto_index+1, salto, 10);
+				tercetos[while_pos_a_completar[while_index]].dos = salto;
+				while_index--;
+				crearTerceto_cic("BI", while_pos_a_completar[while_index], "");
+				while_index--;
+				completar_salto_si_es_comparacion_AND(terceto_index);
+
+				}
 		 ;
 		
-decision: IF P_A condicion P_C bloque ELSE bloque ENDIF
-		| IF P_A condicion P_C bloque ENDIF
+decision: IF P_A condicion P_C 
+	{ if(strcmp(valor_comparacion, "") != 0) 
+	if_guardar_salto(crearTerceto_ccc(valor_comparacion, "", ""));
+	else if_index++; }
+			 decision_bloque
 		;
 
-condicion: comparacion
-         | comparacion AND comparacion 
-		 | comparacion OR comparacion
-		 | NOT comparacion
-		 | NOT P_A comparacion P_C
-		 ;
+decision_bloque:
+		  bloque ENDIF {
+			if_completar_ultimo_salto_guardado_con(terceto_index);
+			completar_salto_si_es_comparacion_AND(terceto_index);
 
-comparacion: expresion MENOR expresion       { printf("Condicion menor OK\n"); }
-		   | expresion MENOR_IGUAL expresion { printf("Condicion menor o igual OK\n"); }
-		   | expresion MAYOR expresion       { printf("Condicion mayor OK\n"); }
-		   | expresion MAYOR_IGUAL expresion { printf("Condicion mayor o igual OK\n"); }
-		   | expresion IGUAL expresion       { printf("Condicion igual OK\n"); }
-		   | expresion DISTINTO expresion    { printf("Condicion distinto OK\n"); }                   
+			}
+		| bloque { if_completar_ultimo_salto_guardado_con(terceto_index+1);
+			       completar_salto_si_es_comparacion_AND(terceto_index+1);
+				   if_guardar_salto(crearTerceto_ccc("BI", "",""));
+
+				}
+		  ELSE bloque ENDIF { if_completar_ultimo_salto_guardado_con(terceto_index); }
+		;
+
+condicion: condicion: comparacion { and_index++; saltos_and_a_completar[and_index] = -1;}
+         | comparacion {and_index++; 
+					saltos_and_a_completar[and_index] = crearTerceto_ccc(valor_comparacion, "", "");
+						} AND comparacion
+		 | comparacion {
+				and_index++; 
+				saltos_and_a_completar[and_index] = -1;
+				crearTerceto_cic(valor_comparacion, terceto_index+2, "");
+				pos_a_completar_OR = crearTerceto_ccc("BI","",""); 
+				}
+			OR comparacion {
+				char *salto = (char*) malloc(sizeof(int));
+				itoa(terceto_index+1, salto, 10);
+				tercetos[pos_a_completar_OR].dos = (char*) malloc(sizeof(char)*strlen(salto));
+				strcpy(tercetos[pos_a_completar_OR].dos, salto);
+			}
+
+		 | NOT { es_negado = 1; } P_A comparacion P_C { es_negado = 0; }
+		 ;
+		 
+
+
+comparacion: expresion { IndComparacion = IndExpresion; } 
+				MENOR expresion { crearTerceto_cii("CMP", IndComparacion, IndExpresion);
+				if(es_negado == 0) { strcpy(valor_comparacion, "BGE"); } else { strcpy(valor_comparacion, "BLT"); }}
+		   | expresion { IndComparacion = IndExpresion; }
+				MENOR_IGUAL expresion { crearTerceto_cii("CMP", IndComparacion, IndExpresion);
+				if(es_negado == 0) { strcpy(valor_comparacion, "BGT"); } else { strcpy(valor_comparacion, "BLE"); }
+			 }
+		   | expresion { IndComparacion = IndExpresion; }
+				MAYOR expresion { crearTerceto_cii("CMP", IndComparacion, IndExpresion);
+		   		if(es_negado == 0) { strcpy(valor_comparacion, "BLE"); } else { strcpy(valor_comparacion, "BGT"); }
+			 }
+		   | expresion { IndComparacion = IndExpresion; }
+				MAYOR_IGUAL expresion { crearTerceto_cii("CMP", IndComparacion, IndExpresion);
+		   		if(es_negado == 0) { strcpy(valor_comparacion, "BLT"); } else { strcpy(valor_comparacion, "BGE"); }
+			 }
+		   | expresion { IndComparacion = IndExpresion; }
+				IGUAL expresion { crearTerceto_cii("CMP", IndComparacion, IndExpresion);
+		   		if(es_negado == 0) { strcpy(valor_comparacion, "BNE"); } else { strcpy(valor_comparacion, "BEQ"); }
+			 }
+		   | expresion { IndComparacion = IndExpresion; }
+				DISTINTO expresion { crearTerceto_cii("CMP", IndComparacion, IndExpresion);
+		   		if(es_negado == 0) { strcpy(valor_comparacion, "BEQ"); } else { strcpy(valor_comparacion, "BNE"); }
+			 }                  
 		   ; 
 
 fibonacci: FIBONACCI P_A CTE_INT P_C
 
 
-take: 	TAKE P_A OP_SUMA PUNTO_COMA CTE_INT PUNTO_COMA C_A takelist C_C P_C { printf("Take suma OK\n"); }
-		| TAKE P_A OP_RESTA PUNTO_COMA CTE_INT PUNTO_COMA C_A takelist C_C P_C { printf("Take resta OK\n"); }
-		| TAKE P_A OP_MULT PUNTO_COMA CTE_INT PUNTO_COMA C_A takelist C_C P_C { printf("Take multi OK\n"); }
-		| TAKE P_A OP_DIV PUNTO_COMA CTE_INT PUNTO_COMA C_A takelist C_C P_C { printf("Take div OK\n"); }
+take: 	TAKE P_A takeOp PUNTO_COMA CTE_INT PUNTO_COMA C_A takelist C_C P_C {  }
+		
 		;
+takeOp:		OP_SUMA | OP_RESTA | OP_MULT | OP_DIV
 
 takelist: 	takelist PUNTO_COMA CTE_INT
 			| CTE_INT
 			|
 			;
 		  
-expresion: expresion OP_SUMA termino  { printf("Suma OK\n"); }
-		 | expresion OP_RESTA termino { printf("Resta OK\n"); }
-		 | termino
+expresion: expresion OP_SUMA termino  { IndExpresion = crearTerceto_cii("+", IndExpresion, IndTermino); }
+		 | expresion OP_RESTA termino { IndExpresion = crearTerceto_cii("-", IndExpresion, IndTermino); }
+		 | termino	{ IndExpresion = IndTermino; }
 		 ;
 		 
-termino: termino OP_MULT factor { printf("Multiplicacion OK\n"); }
-	   | termino OP_DIV factor	{ printf("Division OK\n"); }
-	   | factor
+termino: termino OP_MULT factor  { IndTermino = crearTerceto_cii("*", IndTermino, IndFactor); }
+	   | termino OP_DIV factor   { IndTermino = crearTerceto_cii("/", IndTermino, IndFactor); }
+	   | factor                  { IndTermino = IndFactor; }
 	   ;
 	   
-factor: ID	              { existe_en_ts($1); printf("ID es: %s\n",yylval.strVal); }  
-	  | constante
-	  | P_A expresion P_C
-	  | fibonacci 		  { printf("Fibonacci OK\n"); }
-	  | take 			  { printf("Take OK\n"); }
+factor: ID	               { IndFactor = crearTerceto_ccc($1, "", ""); }
+	  | constante		   
+	  | P_A {    ponerEnPila(&pilaTermino, IndTermino);
+                 ponerEnPila(&pilaExpresion, IndExpresion);
+            }
+        expresion P_C  {
+                            IndFactor = IndExpresion;
+                            IndExpresion = sacarDePila(&pilaExpresion);
+                            IndTermino = sacarDePila(&pilaTermino);
+                        }
+	  | fibonacci 		  {  }
+	  | take 			  {  }
 	  ;
 	  
-constante: CTE_INT    { printf("ENTERO es: %d\n",yylval.intVal); }  
-         | CTE_STRING { printf("STRING es: %s\n",yylval.strVal); }  
-		 | CTE_REAL   { printf("REAL es: %.2f\n",yylval.realVal); }
+constante: CTE_INT    { IndFactor = crearTerceto_icc($1, "", ""); }  
+         | CTE_STRING { IndFactor = crearTerceto_ccc($1, "", ""); }  
+		 | CTE_REAL   { IndFactor = crearTerceto_fcc($1, "", ""); }
 		 ;
 
 entrada: GET ID
@@ -158,9 +301,12 @@ int main(int argc,char *argv[])
   }
   else
   {
+	crearPila(&pilaExpresion);
+    crearPila(&pilaTermino);
 	yyparse();
 	//mostrar_ts();
 	save_reg_ts();
+	save_tercetos();
 	printf("Listo TS\n");
   }
   fclose(yyin);
@@ -181,3 +327,165 @@ void reinicioVariables() {
 }
 
 
+/**** INICIO TERCETOS ****/
+/**** INICIO TERCETOS ****/
+int crearTerceto_ccc(char *uno, char *dos, char *tres) {
+	struct terceto terc;
+	int index = terceto_index;
+	terc.uno = malloc(sizeof(char)*strlen(uno));
+	strcpy(terc.uno, uno);
+	terc.dos = malloc(sizeof(char)*strlen(dos));
+	strcpy(terc.dos, dos);
+	terc.tres = malloc(sizeof(char)*strlen(tres));
+	strcpy(terc.tres, tres);
+	tercetos[index] = terc;
+	terceto_index++;
+	return index; // devuelvo la pos del terceto creado
+}
+
+int crearTerceto_cci(char *uno, char *dos, int tres) {
+	char *tres_char = (char*) malloc(sizeof(int));
+	itoa(tres, tres_char, 10);
+
+	return crearTerceto_ccc(uno, dos, tres_char);
+}
+
+int crearTerceto_cii(char *uno, int dos, int tres) {
+	struct terceto terc;
+	int index = terceto_index;
+
+	char *dos_char = (char*) malloc(sizeof(int));
+	itoa(dos, dos_char, 10);
+
+	return crearTerceto_cci(uno, dos_char, tres);
+}
+
+int crearTerceto_fcc(float uno, char *dos, char *tres) {
+	char *uno_char = (char*) malloc(sizeof(float));
+	snprintf(uno_char, sizeof(float), "%f", uno);
+
+	return crearTerceto_ccc(uno_char, dos, tres);
+}
+
+int crearTerceto_icc(int uno, char *dos, char *tres) {
+	char *uno_char = (char*) malloc(sizeof(int));
+	itoa(uno, uno_char, 10);
+
+	return crearTerceto_ccc(uno_char, dos, tres);
+}
+
+int crearTerceto_cic(char *uno, int dos, char *tres) {
+	char *dos_char = (char*) malloc(sizeof(int));
+	itoa(dos, dos_char, 10);
+
+	return crearTerceto_ccc(uno, dos_char, tres);
+}
+
+void save_tercetos() {
+	FILE *file = fopen("Intermedia.txt", "a");
+
+	if(file == NULL)
+	{
+    	printf("(!) ERROR: No se pudo abrir el txt correspondiente a la generacion de codigo intermedio\n");
+	}
+	else
+	{
+		int i = 0;
+		for (i;i<terceto_index;i++) {
+			// printf("%d (%s, %s, %s)\n", i, tercetos[i].uno, tercetos[i].dos, tercetos[i].tres);
+			fprintf(file, "%d (%s, %s, %s)\n", i, tercetos[i].uno, tercetos[i].dos, tercetos[i].tres);
+		}
+		fclose(file);
+	}
+}
+
+/**** FIN. TERCETOS ****/
+/**** FIN. TERCETOS ****/
+
+/**** PILA ****/
+/**** PILA ****/
+
+void crearPila( Pila *p){
+    p->tope = 0;
+}
+
+int pilaLLena( Pila *p ){
+    return p->tope == tamPila;
+}
+
+int pilaVacia( Pila *p){
+    return p->tope == tamPila;
+}
+
+int ponerEnPila(Pila *p, int dato){
+    if( p->tope == 100){
+        return 0;
+    }
+	printf("\n apilando %d", dato);
+    p->pila[p->tope] = dato;
+    p->tope++;
+    return 1;
+}
+
+int sacarDePila(Pila *p){
+    if( p->tope == 0){
+        return 0;
+    }
+	printf("\n desapilando %d",p->pila[p->tope]);
+    p->tope--;
+    return p->pila[p->tope];
+}
+/**** FIN PILA ****/
+/**** FIN PILA ****/
+
+
+
+/* Basicamente una mini-pila para anidar ifs*/
+void if_guardar_salto(int pos) {
+	if (if_index < 6)
+	{
+		if_index++;
+		if_saltos[if_index] = pos;
+	}
+	else
+	{
+		yyerror("No se puede tener más de 5 ifs anidados\n");
+	}
+}
+
+/* Desapilar anidaciones de ifs */
+void if_completar_ultimo_salto_guardado_con(int pos) {
+	char *salto = (char*) malloc(sizeof(int));
+	itoa(pos, salto, 10);
+	tercetos[if_saltos[if_index]].dos = (char*) malloc(sizeof(char)*strlen(salto));
+	strcpy(tercetos[if_saltos[if_index]].dos, salto);
+	if_index--;
+}
+
+/* Funcion para simil apilar las pos del while */
+void while_guardar_pos(int pos) {
+	if (if_index < 11) // se usa del 1 al 10 y se ocupan dos pos por cada while
+	{
+		while_index++;
+		while_pos_a_completar[while_index] = pos;
+	}
+	else
+	{
+		yyerror("No se puede tener más de 5 whiles anidados");
+	}
+}
+
+/* Si el flag de AND esta prendido completa la pos guardada y vuelve el flag a off */
+void completar_salto_si_es_comparacion_AND(int pos) {
+		if (saltos_and_a_completar[and_index] == -1){
+			and_index--; // flags usados para mantener la correlatividad de la pila de if con la de and
+		}
+		else {
+			char *salto = (char*) malloc(sizeof(int));
+			itoa(pos, salto, 10);
+			tercetos[saltos_and_a_completar[and_index]].dos = (char*) malloc(sizeof(char)*strlen(salto));
+			strcpy(tercetos[saltos_and_a_completar[and_index]].dos, salto);
+			and_index--;
+		}
+
+}
