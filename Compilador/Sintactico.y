@@ -142,7 +142,7 @@ start: programa { printf("\n\n\tCOMPILACION EXITOSA!!\n\n\n"); }
 	 |			{ printf("\n El archivo 'Prueba.Txt' no tiene un programa\n"); }
 	 ;
 
-programa: declaracion { printf("Declaracion OK\n"); } bloque
+programa: declaracion {} bloque
         | bloque
 		;
 		
@@ -368,8 +368,9 @@ int main(int argc,char *argv[])
 	//mostrar_ts();
 	insertarVariablesAuxilaresTDS();
 	save_reg_ts();
+	printf("Tabla de simbolos guardada en ts.txt\n");
 	save_tercetos();
-	printf("Listo TS\n");
+	printf("Tercetos guardados en intermedia.txt\n");
   }
   fclose(yyin);
   return 0;
@@ -483,7 +484,7 @@ int ponerEnPila(Pila *p, int dato){
     if( p->tope == 100){
         return 0;
     }
-	printf("\n apilando %d", dato);
+	//printf("\n apilando %d", dato);
     p->pila[p->tope] = dato;
     p->tope++;
     return 1;
@@ -493,7 +494,7 @@ int sacarDePila(Pila *p){
     if( p->tope == 0){
         return 0;
     }
-	printf("\n desapilando %d",p->pila[p->tope]);
+	//printf("\n desapilando %d",p->pila[p->tope]);
     p->tope--;
     return p->pila[p->tope];
 }

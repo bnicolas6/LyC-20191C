@@ -12,8 +12,6 @@ V2.0
 v2.1
 -Added: Fibonacci, si se puede optimizar mejor, que te mete como 30 tercetos de un saque...
 -Added: TAKE (medio rancio, pero funciona, creo)
-
-falta:
-lo de los print, lo agrego en un toque, los odio a todos.
+-Added: prints y scans, los odio a todos
 
 
