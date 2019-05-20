@@ -108,6 +108,10 @@ int takeLISTAVACIA = 0; //Variable auxiliar que indica si la lista del take esta
 
 /**** TAKE ****/
 
+/**** print y scan ****/
+int IndEntrada;
+int IndSalida;
+/**** fin print y scanf mochos ****/
 %}
 
 %union {
@@ -332,11 +336,19 @@ constante: CTE_INT    { IndFactor = crearTerceto_icc($1, "", ""); }
 		 | CTE_REAL   { IndFactor = crearTerceto_fcc($1, "", ""); }
 		 ;
 
-entrada: GET ID
+entrada: GET ID		{ 		existe_en_ts($2);
+							  IndEntrada = crearTerceto_ccc($2, "", ""); 
+							  crearTerceto_cic("GET",IndEntrada,"");
+							}
        ;
 	   
-salida: DISPLAY CTE_STRING
-      | DISPLAY ID 			{ existe_en_ts($2); }
+salida: DISPLAY CTE_STRING	{ IndSalida = crearTerceto_ccc($2, "", "");
+							  crearTerceto_cic("DISPLAY",IndSalida,"");
+							}
+      | DISPLAY ID 			{ existe_en_ts($2);
+							  IndSalida = crearTerceto_ccc($2, "", "");
+							  crearTerceto_cic("DISPLAY",IndSalida,""); 
+							}
 	  ;
 	  
 %%
@@ -354,6 +366,7 @@ int main(int argc,char *argv[])
     crearPila(&pilaTermino);
 	yyparse();
 	//mostrar_ts();
+	insertarVariablesAuxilaresTDS();
 	save_reg_ts();
 	save_tercetos();
 	printf("Listo TS\n");
@@ -581,4 +594,20 @@ int generarFibonacci(int num){
 	crearTerceto_cic("BI",terceto_index-20,"");
 	
 	return crearTerceto_ccc("fibo","","");
+}
+
+void insertarVariablesAuxilaresTDS(){
+	//(char *nombre, char *tipo, char *valor, char *longitud)
+	
+	
+	//Variables usadas en Fibonacci
+	insertar_tabla_simbolos("fibo","INT","","-");
+	insertar_tabla_simbolos("n1","INT","","-");
+	insertar_tabla_simbolos("n2","INT","","-");
+	insertar_tabla_simbolos("cont","INT","","-");
+	
+	//Variables usadas en TAKE
+	insertar_tabla_simbolos("N","INT","","-");
+	
+
 }
