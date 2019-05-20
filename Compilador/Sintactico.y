@@ -95,7 +95,7 @@ void while_guardar_pos(int pos);
 /**** FIBONACCI ****/
 int generarFibonacci(int num);
 int numFibo=0;
-
+int usadofibo=0;
 /**** FIBONACCI ****/
 
 /**** TAKE ****/
@@ -105,6 +105,7 @@ int takeHASTA = 0; //La CTE del Take que determina cuantos elementos, empezando 
 int takeAUX = 0; //Variable auxiliar que contendra los subresultados del take.
 char takeOP[2]; //Variable auxiliar que contendra el operador del take.
 int takeLISTAVACIA = 0; //Variable auxiliar que indica si la lista del take esta vacia.
+int usadotake=0;
 
 /**** TAKE ****/
 
@@ -263,11 +264,12 @@ comparacion: expresion { IndComparacion = IndExpresion; }
 			 }                  
 		   ; 
 
-fibonacci: FIBONACCI P_A CTE_INT P_C { numFibo=$3; }
+fibonacci: FIBONACCI P_A CTE_INT P_C { usadofibo=1; numFibo=$3; }
 
 
 take: 	TAKE P_A takeOp PUNTO_COMA CTE_INT {takeHASTA =$5; takeLISTAVACIA = 0;} PUNTO_COMA C_A takelist C_C P_C 
 		{
+			usadotake=1;
 			IndTake = crearTerceto_cii(takeOP, terceto_index-1, terceto_index-2);
 			crearTerceto_ccc("N", "", "");
 			takeRESULTADO = crearTerceto_cii("=", terceto_index-1, IndTake);
@@ -602,13 +604,18 @@ void insertarVariablesAuxilaresTDS(){
 	
 	
 	//Variables usadas en Fibonacci
-	insertar_tabla_simbolos("fibo","INT","","-");
-	insertar_tabla_simbolos("n1","INT","","-");
-	insertar_tabla_simbolos("n2","INT","","-");
-	insertar_tabla_simbolos("cont","INT","","-");
+	if(usadofibo == 1){
+		insertar_tabla_simbolos("fibo","INT","","-");
+		insertar_tabla_simbolos("n1","INT","","-");
+		insertar_tabla_simbolos("n2","INT","","-");
+		insertar_tabla_simbolos("cont","INT","","-");
+	}
+	
 	
 	//Variables usadas en TAKE
-	insertar_tabla_simbolos("N","INT","","-");
+	if(usadotake == 1){
+		insertar_tabla_simbolos("N","INT","","-");
+	}
 	
-
+	
 }

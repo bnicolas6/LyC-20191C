@@ -13,5 +13,6 @@ v2.1
 -Added: Fibonacci, si se puede optimizar mejor, que te mete como 30 tercetos de un saque...
 -Added: TAKE (medio rancio, pero funciona, creo)
 -Added: prints y scans, los odio a todos
+-added: Se agregan las variables usadas en fibonacci y take a la TDS
 
 
