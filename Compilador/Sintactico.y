@@ -99,12 +99,12 @@ int numFibo=0;
 /**** FIBONACCI ****/
 
 /**** TAKE ****/
-int takeN = 0; //Variable que tendra el resultado final del take.
-int takeI = 0; //Variable auxiliar en conjunto con takeHASTA.
-int takePRIMERO = 0; //La primer constante de la lista del take.
+int takeRESULTADO = 0; //Variable que tendra el resultado final del take.
+int takeORDEN = 0; //La primer constante de la lista del take.
 int takeHASTA = 0; //La CTE del Take que determina cuantos elementos, empezando del primero intervienen en el take.
 int takeAUX = 0; //Variable auxiliar que contendra los subresultados del take.
-char takeOP; //Variable auxiliar que contendra el operador del take.
+char takeOP[2]; //Variable auxiliar que contendra el operador del take.
+int takeLISTAVACIA = 0; //Variable auxiliar que indica si la lista del take esta vacia.
 
 /**** TAKE ****/
 
@@ -262,40 +262,41 @@ comparacion: expresion { IndComparacion = IndExpresion; }
 fibonacci: FIBONACCI P_A CTE_INT P_C { numFibo=$3; }
 
 
-take: 	TAKE P_A takeOp PUNTO_COMA CTE_INT {takeI = 0; takeAUX = 0; takeHASTA =$5} PUNTO_COMA C_A takelist C_C P_C 
+take: 	TAKE P_A takeOp PUNTO_COMA CTE_INT {takeHASTA =$5; takeLISTAVACIA = 0;} PUNTO_COMA C_A takelist C_C P_C 
 		{
-			//Si la cola esta vacia de una, quiere decir que es una lista vacia.
-			if(cola_vacia())
-				crearTerceto_cci("=", "N", 0); //Es decir N que es la variable donde se guarda el resultado del take vale 0.
-			takePRIMERO = desacolar();
-			//Si despues de sacar el primero me quedo sin elementos, quiere decir que la lista tenia un solo elemento.
-			//Que hago? Tomo accion por default, N va a valer ese elemento.
-			if(cola_vacia())
-				crearTerceto_cci("=", "N", takePRIMERO);
-			else
-			{
-				takeAUX = desacolar();
-				IndTake = crearTerceto_cii(takeOP, takePRIMERO, takeAUX);
-				while(!cola_vacia() && takeI < takeHASTA)
-				{
-					takeAUX = desacolar();
-					IndTake = crearTerceto_cii(takeOP, IndTake, takeAUX);
-					takeI++;
-				}
-				crearTerceto_cci("=", "N", IndTake);
-			}
-			
+			takeRESULTADO = (takeLISTAVACIA!=0) ? crearTerceto_cci("=", "N", IndTake) : crearTerceto_cci("=", "N", 0);
 		}
 		
 		;
-takeOp:		OP_SUMA {takeOP = '+'}
-			| OP_RESTA {takeOP = '-'}  
-			| OP_MULT {takeOP = '*'}  
-			| OP_DIV {takeOP = '/'} 
+takeOp:		OP_SUMA {strcpy(takeOP, "+");}
+			| OP_RESTA {strcpy(takeOP, "-");}  
+			| OP_MULT {strcpy(takeOP, "*");}  
+			| OP_DIV {strcpy(takeOP, "/");} 
 
-takelist: 	takelist PUNTO_COMA CTE_INT {acolar($3);}
-			| CTE_INT {acolar($1);}
-			|
+takelist: 	takelist PUNTO_COMA CTE_INT 
+			{
+				if(takeHASTA > 0 && takeORDEN%2 == 0) 
+				{
+					IndTake = crearTerceto_icc($3, "", "");
+					takeORDEN++;
+					takeHASTA--;
+				}
+				else if(takeHASTA > 0 && takeORDEN%2 == 1)
+				{
+					IndTake = crearTerceto_cii(takeOP, IndTake-2, IndTake-1);
+					takeORDEN++;
+					takeHASTA--;
+				}
+			}
+			| CTE_INT //Por esta regla pasa solo una vez.
+			{
+				if(takeHASTA>0)
+				{
+					IndTake = crearTerceto_icc($1, "", "");
+					takeHASTA--;
+				}
+			}
+			| {takeLISTAVACIA=1;} //Si la lista esta vacia lo indico en un flag a tratar despues.
 			;
 		  
 expresion: expresion OP_SUMA termino  { IndExpresion = crearTerceto_cii("+", IndExpresion, IndTermino); }
@@ -319,7 +320,7 @@ factor: ID	               { IndFactor = crearTerceto_ccc($1, "", ""); }
                             IndTermino = sacarDePila(&pilaTermino);
                         }
 	  | fibonacci 		  { IndFactor = generarFibonacci(numFibo); }
-	  | take 			  {  }
+	  | take 			  { IndFactor = takeRESULTADO;}
 	  ;
 	  
 constante: CTE_INT    { IndFactor = crearTerceto_icc($1, "", ""); }  
