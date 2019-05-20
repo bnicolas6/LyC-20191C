@@ -264,7 +264,7 @@ fibonacci: FIBONACCI P_A CTE_INT P_C { numFibo=$3; }
 
 take: 	TAKE P_A takeOp PUNTO_COMA CTE_INT {takeHASTA =$5; takeLISTAVACIA = 0;} PUNTO_COMA C_A takelist C_C P_C 
 		{
-			takeRESULTADO = (takeLISTAVACIA!=0) ? crearTerceto_cci("=", "N", IndTake) : crearTerceto_cci("=", "N", 0);
+			takeRESULTADO = crearTerceto_cci("=", "N", IndTake);
 		}
 		
 		;
@@ -283,9 +283,11 @@ takelist: 	takelist PUNTO_COMA CTE_INT
 				}
 				else if(takeHASTA > 0 && takeORDEN%2 == 1)
 				{
-					IndTake = crearTerceto_cii(takeOP, IndTake-2, IndTake-1);
+					IndTake = crearTerceto_cii(takeOP, IndTake-1, IndTake);
 					takeORDEN++;
 					takeHASTA--;
+					IndTake = crearTerceto_icc($3, "", "");
+					IndTake = crearTerceto_cii(takeOP, IndTake-1, IndTake);
 				}
 			}
 			| CTE_INT //Por esta regla pasa solo una vez.
