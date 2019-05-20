@@ -26,6 +26,7 @@ int IndFactor;
 int IndInlist;
 int IndEntrada;
 int IndSalida;
+int IndTake;
 
 //Estructura del terceto
 struct terceto {
@@ -96,6 +97,16 @@ int generarFibonacci(int num);
 int numFibo=0;
 
 /**** FIBONACCI ****/
+
+/**** TAKE ****/
+int takeN = 0; //Variable que tendra el resultado final del take.
+int takeI = 0; //Variable auxiliar en conjunto con takeHASTA.
+int takePRIMERO = 0; //La primer constante de la lista del take.
+int takeHASTA = 0; //La CTE del Take que determina cuantos elementos, empezando del primero intervienen en el take.
+int takeAUX = 0; //Variable auxiliar que contendra los subresultados del take.
+char takeOP; //Variable auxiliar que contendra el operador del take.
+
+/**** TAKE ****/
 
 %}
 
@@ -251,13 +262,39 @@ comparacion: expresion { IndComparacion = IndExpresion; }
 fibonacci: FIBONACCI P_A CTE_INT P_C { numFibo=$3; }
 
 
-take: 	TAKE P_A takeOp PUNTO_COMA CTE_INT PUNTO_COMA C_A takelist C_C P_C {  }
+take: 	TAKE P_A takeOp PUNTO_COMA CTE_INT {takeI = 0; takeAUX = 0; takeHASTA =$5} PUNTO_COMA C_A takelist C_C P_C 
+		{
+			//Si la cola esta vacia de una, quiere decir que es una lista vacia.
+			if(cola_vacia())
+				crearTerceto_cci("=", "N", 0); //Es decir N que es la variable donde se guarda el resultado del take vale 0.
+			takePRIMERO = desacolar();
+			//Si despues de sacar el primero me quedo sin elementos, quiere decir que la lista tenia un solo elemento.
+			//Que hago? Tomo accion por default, N va a valer ese elemento.
+			if(cola_vacia())
+				crearTerceto_cci("=", "N", takePRIMERO);
+			else
+			{
+				takeAUX = desacolar();
+				IndTake = crearTerceto_cii(takeOP, takePRIMERO, takeAUX);
+				while(!cola_vacia() && takeI < takeHASTA)
+				{
+					takeAUX = desacolar();
+					IndTake = crearTerceto_cii(takeOP, IndTake, takeAUX);
+					takeI++;
+				}
+				crearTerceto_cci("=", "N", IndTake);
+			}
+			
+		}
 		
 		;
-takeOp:		OP_SUMA | OP_RESTA | OP_MULT | OP_DIV
+takeOp:		OP_SUMA {takeOP = '+'}
+			| OP_RESTA {takeOP = '-'}  
+			| OP_MULT {takeOP = '*'}  
+			| OP_DIV {takeOP = '/'} 
 
-takelist: 	takelist PUNTO_COMA CTE_INT
-			| CTE_INT
+takelist: 	takelist PUNTO_COMA CTE_INT {acolar($3);}
+			| CTE_INT {acolar($1);}
 			|
 			;
 		  
