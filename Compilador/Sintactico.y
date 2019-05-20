@@ -264,7 +264,9 @@ fibonacci: FIBONACCI P_A CTE_INT P_C { numFibo=$3; }
 
 take: 	TAKE P_A takeOp PUNTO_COMA CTE_INT {takeHASTA =$5; takeLISTAVACIA = 0;} PUNTO_COMA C_A takelist C_C P_C 
 		{
-			takeRESULTADO = crearTerceto_cci("=", "N", IndTake);
+			IndTake = crearTerceto_cii(takeOP, terceto_index-1, terceto_index-2);
+			crearTerceto_ccc("N", "", "");
+			takeRESULTADO = crearTerceto_cii("=", terceto_index-1, IndTake);
 		}
 		
 		;
