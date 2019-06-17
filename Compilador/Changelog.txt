@@ -1,0 +1,18 @@
+V2.0
+-Added: Codigo para las funciones de tercetos
+-Added: Codigo para las funciones de pila
+-Added: Pila para los ifs anidados
+-Added: Pila para los whiles anidados
+-Added: Variables varias para el manejo de tercetos, whiles e ifs
+
+-Arreglado el conflicto reduce/reduce en la regla semantica del if
+-Borrado el NOT sin parentesis (porque me hacia otro conflicto reduce/reduce xd)
+-Borrado de la mayoria de los printfs en las acciones semanticas
+
+v2.1
+-Added: Fibonacci, si se puede optimizar mejor, que te mete como 30 tercetos de un saque...
+-Added: TAKE (medio rancio, pero funciona, creo)
+-Added: prints y scans, los odio a todos
+-added: Se agregan las variables usadas en fibonacci y take a la TDS
+
+

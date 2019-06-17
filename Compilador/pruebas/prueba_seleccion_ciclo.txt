@@ -1,0 +1,41 @@
+DECVAR         
+ 
+	INT : a;b;c;d
+ENDDEC
+
+
+
+*/soy un comentario/*
+
+a=0
+;
+
+c=10
+;
+
+b=6;
+
+
+
+WHILE (a <5 AND b > 2)
+    
+	
+	
+WHILE (a <4 OR b > 3)
+  
+		IF (C == 10)
+       
+		 a = a + 1;
+    
+		ENDIF
+
+	b = b - 1;	
+	ENDWHILE
+
+
+	
+
+
+ENDWHILE
+
+

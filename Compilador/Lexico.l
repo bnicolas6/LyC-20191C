@@ -6,6 +6,8 @@
 #include <float.h>
 #include <limits.h>
 #include "y.tab.h"
+#define _INT_MIN 0
+#define _INT_MAX 32767
 
 FILE *yyin;
 
@@ -69,7 +71,7 @@ ELSE			[Ee][Ll][Ss][Ee]
 ENDIF			[Ee][Nn][Dd][Ii][Ff]
 AND				[Aa][Nn][Dd]
 OR				[Oo][Rr]
-FIBONACCI		[Ff][Ii][Bb][Oo][Nn][Aa][Cc][Cc][Ii]
+FIBONACCI		[Ff][Ii][Bb]
 TAKE			[Tt][Aa][Kk][Ee]
 NOT				[Nn][Oo][Tt]
 INT				[Ii][Nn][Tt]
@@ -122,7 +124,21 @@ DISPLAY			[Dd][Ii][Ss][Pp][Ll][Aa][Yy]
 "!="            { return DISTINTO; }
 
 {ID}			{ yylval.strVal = strdup(yytext); validarID(yylval.strVal); return ID; }
-{CTE_STRING}	{ yylval.strVal = strdup(yytext); validarString(yylval.strVal); insertar_ctestring_en_ts(yylval.strVal); return CTE_STRING; }
+{CTE_STRING}	{ yylval.strVal = strdup(yytext); 
+
+				validarString(yylval.strVal); 
+				
+				/** Esto lo hice porque me agarraba las comillas, creo que esta mal la regex...
+					arreglar en versiones futuras, por ahora esto funciona **/
+					
+					yylval.strVal = malloc(yyleng - 1);  
+					memcpy (yylval.strVal, yytext + 1, yyleng - 2); 
+					yylval.strVal[yyleng - 2] = 0; 
+				/** fin del codigo rancio**/
+				
+				insertar_ctestring_en_ts(yylval.strVal); 
+				
+				return CTE_STRING; }
 {CTE_INT}		{ yylval.intVal = atoi(yytext); validarInt(yylval.intVal); insertar_cteint_en_ts(yylval.intVal); return CTE_INT; }
 {CTE_REAL}		{ yylval.realVal = atof(yytext); validarReal(yylval.realVal); insertar_ctereal_en_ts(yylval.realVal); return CTE_REAL; }
 
@@ -140,7 +156,7 @@ DISPLAY			[Dd][Ii][Ss][Pp][Ll][Aa][Yy]
 int validarInt(int entero)
 {
 
-	if(entero < INT_MIN || entero > INT_MAX){
+	if(entero < _INT_MIN || entero > _INT_MAX){
 		printf("(!) ERROR: Constante entera fuera de rango (32 bits maximo) -> Linea %d\n", yylineno);
 		fprintf(stderr, "Fin de ejecucion.\n");
 		system ("Pause");
