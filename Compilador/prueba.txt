@@ -1,31 +1,30 @@
-DECVAR 
-FLOAT : a1; b1
-STRING: variable1
-INT : a;b
+-/ bloque de declaracion /-     
+DECVAR         
+ a,b,z : INT
+ c : FLOAT
+ d,e : STRING
 ENDDEC
 
-*/soy un comentario/*
+a = (5 * 8)
+WRITE a
 
-b=123;
-a=b;
-variable1 = "asd";
-variable1 = "asd";
-a1=.9999;
-b1=99.;
+c = 3.0
 
-IF ( a < (a*3) )
-    IF (a == b)
-        a = a+5;
-    ENDIF
-ELSE
-   a = a-5;
+
+IF (((2 * 1) - 1) == 1 )
+    c = AVG([2,a+b,c])
 ENDIF
 
 
 
-TAKE (* ; 3 ; [2 ; 12 ; 24 ; 48] )
-TAKE (+ ; 2 ; [2 ; 12 ; 24 ; 48] )
-TAKE (- ; 3 ; [2 ; 12 ; 24 ; 48] )
-TAKE (/ ; 4 ; [2 ; 12 ; 24 ; 48] )
-TAKE (+ ; 3 ; [2 ; 12 ] )
-TAKE (/ ; 4 ; [ ] )
+IF (E != "Holaa    Mundo")
+    D = E
+ELSE
+    E = D
+    READ E      -/ lectura de variable -/ READ X /- entrada /-
+ENDIF
+
+WRITE "Variable ingresada"
+WRITE E
+
+WRITE "Ejecucion Exitosa"

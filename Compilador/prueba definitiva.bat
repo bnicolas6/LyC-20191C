@@ -1,16 +1,16 @@
 del ts.txt
-del Intermedia.txt
+del intermedia.txt
 c:\GnuWin32\bin\flex Lexico.l
 pause
 c:\GnuWin32\bin\bison -dyv Sintactico.y
 pause
-c:\MinGW\bin\gcc.exe lex.yy.c y.tab.c -o Tercera.exe
+c:\MinGW\bin\gcc.exe lex.yy.c y.tab.c -o Primera.exe
 pause
 pause
-Tercera.exe Prueba.txt
+Primera.exe ./pruebas/prueba.txt
 del lex.yy.c
 del y.tab.c
 del y.output
 del y.tab.h
-del Tercera.exe
+del Primera.exe
 pause

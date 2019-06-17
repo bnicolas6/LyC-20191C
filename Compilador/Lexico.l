@@ -6,6 +6,8 @@
 #include <float.h>
 #include <limits.h>
 #include "y.tab.h"
+#define _INT_MIN 0
+#define _INT_MAX 32767
 
 FILE *yyin;
 
@@ -39,9 +41,15 @@ void mensaje_error();
 int nombre_existe_en_ts(char *id);
 void existe_en_ts(char *id);
 void insertar_tabla_simbolos(char *nombre, char *tipo, char *valor, char *longitud);
+void insertar_ts_si_no_existe(char *nombre, char *tipo, char *valor, char *longitud);
+
 void save_reg_ts();
 void mostrar_ts();
 void guardarTipos(int variableActual, char listaVariables[][20], char tipoActual[]);
+
+int tipoDeDato(int pos);
+
+void generaSegmDatosAsm(FILE* pf_asm);
 
 %}
 
@@ -54,8 +62,9 @@ DELIM           [ \t\n\r]
 CARACTER        [a-z|A-Z|0-9|=|>|<|!|:|+|-|*|/|?|¿|!|¡|@|%|#|&|°|´|^|`|~|/|\\|-|_|.|,|;|¬||]
 VALID_STRING    ({CARACTER}+|{DELIM})*
 COMENTARIO_S    -\/{VALID_STRING}\/-
-COMENTARIO      "*/".({LETRA}|{DIGITO}|.)*\/\*
-COMENTARIOL		[*/].([A-Za-z0-9_]*).[/*]
+COMENTARIO      ({COMENTARIO_S}|-\/{VALID_STRING}{COMENTARIO_S}{VALID_STRING}\/-)+
+
+
                 
 CTE_STRING      \"{VALID_STRING}\"
 CTE_REAL        -?{DIGITO}+"."{DIGITO}*
@@ -69,7 +78,7 @@ ELSE			[Ee][Ll][Ss][Ee]
 ENDIF			[Ee][Nn][Dd][Ii][Ff]
 AND				[Aa][Nn][Dd]
 OR				[Oo][Rr]
-FIBONACCI		[Ff][Ii][Bb][Oo][Nn][Aa][Cc][Cc][Ii]
+FIBONACCI		[Ff][Ii][Bb]
 TAKE			[Tt][Aa][Kk][Ee]
 NOT				[Nn][Oo][Tt]
 INT				[Ii][Nn][Tt]
@@ -123,6 +132,18 @@ DISPLAY			[Dd][Ii][Ss][Pp][Ll][Aa][Yy]
 
 {ID}			{ yylval.strVal = strdup(yytext); validarID(yylval.strVal); return ID; }
 {CTE_STRING}	{ yylval.strVal = strdup(yytext); validarString(yylval.strVal); insertar_ctestring_en_ts(yylval.strVal); return CTE_STRING; }
+
+
+				
+				/** Esto lo hice porque me agarraba las comillas, creo que esta mal la regex...
+					arreglar en versiones futuras, por ahora esto funciona
+					
+					yylval.strVal = malloc(yyleng - 1);  
+					memcpy (yylval.strVal, yytext + 1, yyleng - 2); 
+					yylval.strVal[yyleng - 2] = 0; 
+				fin del codigo rancio**/
+				
+				
 {CTE_INT}		{ yylval.intVal = atoi(yytext); validarInt(yylval.intVal); insertar_cteint_en_ts(yylval.intVal); return CTE_INT; }
 {CTE_REAL}		{ yylval.realVal = atof(yytext); validarReal(yylval.realVal); insertar_ctereal_en_ts(yylval.realVal); return CTE_REAL; }
 
@@ -130,7 +151,9 @@ DISPLAY			[Dd][Ii][Ss][Pp][Ll][Aa][Yy]
 "\t"
 "\n"		    
 {COMENTARIO}   
-{COMENTARIOL}
+
+.    { printf("\nCaracter invalido!\n");  exit(1);}
+
 %%
 
 
@@ -140,7 +163,7 @@ DISPLAY			[Dd][Ii][Ss][Pp][Ll][Aa][Yy]
 int validarInt(int entero)
 {
 
-	if(entero < INT_MIN || entero > INT_MAX){
+	if(entero < _INT_MIN || entero > _INT_MAX){
 		printf("(!) ERROR: Constante entera fuera de rango (32 bits maximo) -> Linea %d\n", yylineno);
 		fprintf(stderr, "Fin de ejecucion.\n");
 		system ("Pause");
@@ -336,3 +359,63 @@ void guardarTipos(int variableActual, char listaVariables[][20], char tipoActual
 	}
   }
 }
+
+int tipoDeDato(int pos) {
+	char * tipoDato = tabla_simbolos[pos].tipo;
+	
+	if(strcmpi("INT", tipoDato) == 0 || strcmpi("CTE_INT", tipoDato) == 0 )
+		return 1;
+
+	if(strcmpi("REAL", tipoDato) == 0 || strcmpi("CTE_REAL", tipoDato) == 0)
+		return 2;
+
+	if(strcmpi("STRING", tipoDato) == 0 || strcmpi("CTE_STRING", tipoDato) == 0)
+		return 3;
+}
+
+void insertar_ts_si_no_existe(char *nombre, char *tipo, char *valor, char *longitud) {
+	char* aux = (char*) malloc(10*sizeof(char));
+	*aux='\0';
+	strcpy(aux, nombre);
+	if(nombre_existe_en_ts(aux)==-1) {
+		insertar_tabla_simbolos(aux,tipo,valor,longitud);
+	}
+}
+
+/*
+	Generacion segmento datos a partir de la ts
+*/
+void generaSegmDatosAsm(FILE* pf_asm)
+{
+	int i;
+
+	fprintf(pf_asm, "\n.DATA \n");
+
+
+	for(i=0; i<cant_reg; i++)
+	{
+		struct registro_ts reg = tabla_simbolos[i];
+		int tipo = tipoDeDato(i);
+		if(strcmpi(reg.tipo, "REAL") == 0 || strcmpi(reg.tipo, "INT") == 0)
+		{
+			fprintf(pf_asm, "\t%s dd ?\t ; Declaracion de Variable Numerica\n", getNombreAsm(reg.nombre));
+		}
+		else if(strcmpi(reg.tipo, "STRING") == 0)
+		{
+			fprintf(pf_asm, "\t%s db 30 dup (?),\"$\"\t;Declaracion de Variable String\n", getNombreAsm(reg.nombre));
+		}
+		else if(strcmpi(reg.tipo, "CTE_STRING") == 0)
+		{
+			fprintf(pf_asm, "\t%s db %s, \"$\", 30 dup (?)\t;Declaracion de Constant String\n", getNombreAsm(reg.nombre), reg.valor);
+		}
+		else if(strcmpi(reg.tipo, "CTE_INT") == 0 || strcmpi(reg.tipo, "CTE_REAL") == 0)
+		{
+			if(strstr(reg.valor,".")){
+				fprintf(pf_asm, "\t%s dd %s\t;Declaracion de Constant Number\n", getNombreAsm(reg.nombre), reg.valor);
+			}else{
+				fprintf(pf_asm, "\t%s dd %s.0\t;Declaracion de Constant Number\n", getNombreAsm(reg.nombre), reg.valor);
+			}
+		}
+	}
+}
+
