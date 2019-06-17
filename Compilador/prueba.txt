@@ -1,30 +1,26 @@
--/ bloque de declaracion /-     
 DECVAR         
- a,b,z : INT
- c : FLOAT
- d,e : STRING
+	INT : a;b;c;d;e
 ENDDEC
 
-a = (5 * 8)
-WRITE a
+*/soy un comentario/*
 
-c = 3.0
+a=0;
+c=10;
+b=6;
+d=87;
+e=5;
 
+WHILE (a <5 AND b > 2)
+	e = FIB(10);
+	WHILE (a <4 OR b > 3)
+		TAKE (* ; 3 ; [2 ; 12 ; 24 ; 48] );
+		TAKE (+ ; 2 ; [2 ; 12 ; 24 ; 48] );
+		TAKE (- ; 3 ; [2 ; 12 ; 24 ; 48] );
+		TAKE (/ ; 4 ; [2 ; 12 ; 24 ; 48] );
+		TAKE (+ ; 3 ; [2 ; 12 ] );
+		TAKE (/ ; 4 ; [ ] );
+		a = a + 1;
+		b = b - 1;
+	ENDWHILE
+ENDWHILE
 
-IF (((2 * 1) - 1) == 1 )
-    c = AVG([2,a+b,c])
-ENDIF
-
-
-
-IF (E != "Holaa    Mundo")
-    D = E
-ELSE
-    E = D
-    READ E      -/ lectura de variable -/ READ X /- entrada /-
-ENDIF
-
-WRITE "Variable ingresada"
-WRITE E
-
-WRITE "Ejecucion Exitosa"

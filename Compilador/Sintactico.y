@@ -396,6 +396,8 @@ int main(int argc,char *argv[])
 	printf("Tabla de simbolos guardada en ts.txt\n");
 	save_tercetos();
 	printf("Tercetos guardados en intermedia.txt\n");
+	genera_asm();
+	printf("Assembler guardado en final.asm\n");
   }
   fclose(yyin);
   return 0;
