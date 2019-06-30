@@ -452,11 +452,11 @@ int buscarTipoTS(char* nombreVar) {
 int crearTerceto_ccc(char *uno, char *dos, char *tres) {
 	struct terceto terc;
 	int index = terceto_index;
-	terc.uno = malloc(sizeof(char)*strlen(uno));
+	terc.uno = malloc(sizeof(char)*strlen(uno)+1);
 	strcpy(terc.uno, uno);
-	terc.dos = malloc(sizeof(char)*strlen(dos));
+	terc.dos = malloc(sizeof(char)*strlen(dos)+1);
 	strcpy(terc.dos, dos);
-	terc.tres = malloc(sizeof(char)*strlen(tres));
+	terc.tres = malloc(sizeof(char)*strlen(tres)+1);
 	strcpy(terc.tres, tres);
 	tercetos[index] = terc;
 	terceto_index++;
@@ -770,8 +770,6 @@ void genera_asm()
 				fprintf(pf_asm, "%s: \n", etiqueta_aux);
 			}
 		}
-
-
 		if (opSimple == 1) {
 			// Ids, constantes
 			cant_op++;
@@ -779,7 +777,6 @@ void genera_asm()
 		} 
 		else if (opUnaria == 1) {
 			// Saltos, write, read
-			
 			if (strcmp("WRITE", tercetos[i].uno) == 0) 
 			{	
 				int tipo = buscarTipoTS(tercetos[atoi(tercetos[i].dos)].uno);
@@ -816,6 +813,7 @@ void genera_asm()
 			}
 			else // saltos
 			{
+				//printf("TERCETO NUMERO %d \n", i);
 				char *codigo = getCodOp(tercetos[i].uno);
 				sprintf(etiqueta_aux, "ETIQ_%d", atoi(tercetos[i].dos));
 				if (atoi(tercetos[i].dos) >= terceto_index) 
@@ -878,6 +876,7 @@ void genera_asm()
 			
 		}
 	}
+
 
 	if(agregar_etiqueta_final_nro != -1) {
 		sprintf(etiqueta_aux, "ETIQ_%d", agregar_etiqueta_final_nro);
@@ -946,6 +945,8 @@ char* getCodOp(char* token)
 	else if (!strcmp(token, "BI")) {
 		return "JMP";
 	}
+	else
+		return token;
 }
 
 /*

@@ -1,7 +1,7 @@
 DECVAR 
-	FLOAT : a1; b1
-	STRING: variable1
-	INT : a;b;c;d
+    FLOAT : a1; b1
+    STRING: variable1
+    INT : a;b;c;d
 ENDDEC
 DISPLAY "FIN DECLARACION DE VARIABLES";
 */soy un comentario/*
@@ -12,8 +12,8 @@ c = 666;
 a = b;
 variable1 = "asd";
 variable1 = "asd";
-a1 = .9999;
-b1 = 99.;
+a1 = 9999;
+b1 = 99;
 DISPLAY "FIN ASIGNACIONES";
 
 GET d;
@@ -34,19 +34,19 @@ DISPLAY "SEGUNDO IF CON FIB Y TAKE";
 
 IF ( FIB(2) >= (a / TAKE (*;3;[2;12;24;48])) )
     IF (a == b OR a <= b)
-    	*/Soy otro comentario/*
+        */Soy otro comentario/*
         a = a - 5;
     ENDIF
 ENDIF
 
 DISPLAY "PRUEBA DEL NOT AL FIBONACI";
 IF (NOT(FIB(3) > 4))
-	c = "666";
+    c = "666";
 ENDIF
 
 DISPLAY "CICLO CON FIBO Y TAKE";
 WHILE (fib(1) * TAKE (*;3;[2;12;24;48]) < 1000)
-	d = fib(1);
-	variable1 = "pepe 1";
+    d = fib(1);
+    variable1 = "pepe 1";
 ENDWHILE
 
